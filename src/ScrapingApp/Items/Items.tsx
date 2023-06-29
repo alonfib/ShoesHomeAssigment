@@ -26,7 +26,7 @@ export default Items;
 
 const ItemsWrapper = styled.div`
   display: flex;
-  width: 300;
+  /* width: 300; */
   flex-direction: column;
   background-color: "red";
 `;

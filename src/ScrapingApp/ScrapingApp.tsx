@@ -78,6 +78,14 @@ function ScrapingApp() {
 
       <div className="resultsWrapper">
         <h2>Search Results</h2>
+        <div className="table-titles">
+          <div className="img">image</div>
+          <div className="titles-container">
+            <div>title</div>
+            <div>price</div>
+            <div>link</div>
+          </div>
+        </div>
         {isLoading ? "Loading" : <Items items={items} />}
       </div>
     </ScrappingAppWrapper>
@@ -87,6 +95,8 @@ function ScrapingApp() {
 export default ScrapingApp;
 
 const ScrappingAppWrapper = styled.div`
+  text-align: center;
+
   h1,
   .resultsWrapper > h2 {
     text-align: center;
@@ -94,7 +104,30 @@ const ScrappingAppWrapper = styled.div`
 
   .resultsWrapper {
     padding: 0 8px;
+
+    .table-titles {
+      display:  flex;
+      padding: 8px 8px;
+      border-bottom: 1px solid black;
+      .img {
+          margin-right: 20px;
+          width: 140px;
+        }
+
+      .titles-container {
+        // copy of row values
+
+        width: calc(100% - 156px);
+        grid-template-columns: 40% 20% 40%;
+        display: grid;
+        align-items: center;
+        justify-content: space-between;
+        /* padding: 8px 16px; */
+
+      }
+    }
   }
+
   .actions {
     display: flex;
     width: 100%;
