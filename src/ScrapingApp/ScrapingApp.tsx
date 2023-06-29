@@ -66,11 +66,11 @@ function ScrapingApp() {
           }}
           debounceDelay={1200}
           defaultValue={searchTerm}
-          placeholder={"Enter search term"}
+          placeholder={"Search shoe..."}
         />
         <div className={"link-input-wrapper"}>
-          <Input onChange={setUrlInputValue} value={urlInputValue} placeholder={"Enter Link"} />
-          <button className="link-button" onClick={() => addLink()}>Add Link</button>
+          <Input onChange={setUrlInputValue} value={urlInputValue} placeholder={"Enter link"} />
+          <button disabled={urlInputValue.length === 0} className="link-button" onClick={() => addLink()}>Add Link</button>
         </div>
       </div>
 
@@ -83,17 +83,28 @@ function ScrapingApp() {
 export default ScrapingApp;
 
 const ScrappingAppWrapper = styled.div`
+  h1, h2 {
+    text-align: center;
+  }
   .actions {
     display: flex;
     width: 100%;
     justify-content: space-around;
 
-    .link-input-wrapper  {
-      display: flex;
-      height: 40px;
+    .input-field  {
+      height: 100%;
+      padding-bottom: 0;
+      padding-top: 0;
+    }
 
-      .link-button  {
-        height: auto;
+    .link-input-wrapper  {
+      height: 31px;
+      display: flex;
+      align-items: center;
+
+      button  {
+        height: 28px ;
+        margin-left: 8px
       }
     }
 

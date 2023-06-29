@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 
 type IInput = {
-  label?: string;
   value?: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -13,20 +12,19 @@ type IInput = {
   defaultValue?: string;
 };
 
-const Input = ({ 
-  label, 
+const Input = ({
   value,
-  defaultValue, 
-  onChange = () => null, 
-  placeholder = "", 
+  defaultValue,
+  onChange = () => null,
+  placeholder = "",
   inputType = "text",
   className = "",
-  debounceDelay =  0
+  debounceDelay = 0,
 }: IInput) => {
-  const [inputValue, setInputValue] = useState<string  | undefined >(value);
+  const [inputValue, setInputValue] = useState<string | undefined>(value);
 
   // Debounce the onChange event
-  const [debouncedValue] = useDebounce(inputValue , debounceDelay);
+  const [debouncedValue] = useDebounce(inputValue, debounceDelay);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -34,38 +32,25 @@ const Input = ({
   };
 
   useEffect(() => {
-    onChange(debouncedValue ?? "" );
+    onChange(debouncedValue ?? "");
   }, [debouncedValue]);
 
   return (
-    <InputWrapper className={className}>
-      <label className="input-label">{label}</label>
-      <input
-        className="input-field"
-        type={inputType}
-        defaultValue={defaultValue}
-        value={inputValue}
-        onChange={handleChange}
-        placeholder={placeholder}
-      />
-    </InputWrapper>
+    <StyledInput
+      type={inputType}
+      defaultValue={defaultValue}
+      value={inputValue}
+      onChange={handleChange}
+      placeholder={placeholder}
+    />
   );
 };
 
 export default Input;
 
-const InputWrapper = styled.div`
-  margin-bottom: 10px;
-
-  .input-label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  .input-field {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-  }
+const StyledInput = styled.input`
+  height: 20px;
+  padding: 4px 8px ;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 `;
