@@ -61,6 +61,14 @@ const ItemRowWrapper = styled.div`
   .titles-wrapper {
   }
 
+  .url .value{
+  padding-right: 8px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
   .img {
     display: flex;
     align-items: center;

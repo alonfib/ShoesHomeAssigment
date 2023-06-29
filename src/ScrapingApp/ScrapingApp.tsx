@@ -70,12 +70,16 @@ function ScrapingApp() {
         />
         <div className={"link-input-wrapper"}>
           <Input onChange={setUrlInputValue} value={urlInputValue} placeholder={"Enter link"} />
-          <button disabled={urlInputValue.length === 0} className="link-button" onClick={() => addLink()}>Add Link</button>
+          <button disabled={urlInputValue.length === 0} className="link-button" onClick={() => addLink()}>
+            Add Link
+          </button>
         </div>
       </div>
 
-      <h2>Search Results</h2>
-      {isLoading ? "Loading" : <Items items={items} />}
+      <div className="resultsWrapper">
+        <h2>Search Results</h2>
+        {isLoading ? "Loading" : <Items items={items} />}
+      </div>
     </ScrappingAppWrapper>
   );
 }
@@ -83,31 +87,34 @@ function ScrapingApp() {
 export default ScrapingApp;
 
 const ScrappingAppWrapper = styled.div`
-  h1, h2 {
+  h1,
+  .resultsWrapper > h2 {
     text-align: center;
+  }
+
+  .resultsWrapper {
+    padding: 0 8px;
   }
   .actions {
     display: flex;
     width: 100%;
     justify-content: space-around;
 
-    .input-field  {
+    .input-field {
       height: 100%;
       padding-bottom: 0;
       padding-top: 0;
     }
 
-    .link-input-wrapper  {
+    .link-input-wrapper {
       height: 31px;
       display: flex;
       align-items: center;
 
-      button  {
-        height: 28px ;
-        margin-left: 8px
+      button {
+        height: 28px;
+        margin-left: 8px;
       }
     }
-
-    
   }
 `;
