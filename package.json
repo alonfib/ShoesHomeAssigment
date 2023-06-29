@@ -19,6 +19,7 @@
     "react-scripts": "5.0.1",
     "scss": "^0.2.4",
     "styled-components": "^6.0.1",
+    "use-debounce": "^9.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -48,6 +49,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.1",
     "@types/node-sass": "^4.11.3",
-    "node-sass": "^7.0.3"
+    "node-sass": "^7.0.3",
+    "typescript": "^5.1.6"
   }
 }
