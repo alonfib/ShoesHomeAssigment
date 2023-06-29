@@ -9,8 +9,14 @@ export type ItemType = {
 const Items = ({ items }: ItemType) => {
   return (
     <ItemsWrapper>
-      {items.map((item) => (
-        <ItemRow url={item.url} price={item.price} title={item.title} key={item.url} />
+      {!!items && items.length > 0 && items.map((item) => (
+        <ItemRow
+          url={item.url}
+          price={item.price}
+          title={item.title}
+          key={item.url}
+          imgSrc={item.imgSrc}
+        />
       ))}
     </ItemsWrapper>
   );

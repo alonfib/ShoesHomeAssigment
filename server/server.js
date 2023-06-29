@@ -2,6 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const cheerio = require("cheerio");
+const pLimit = require('p-limit');
 
 const app = express();
 
@@ -20,59 +21,94 @@ async function getEbayData(responseData) {
   const $ = cheerio.load(responseData);
   const itemPrice = $(".x-price-primary > span > .ux-textspans").first().text();
   const itemTitle = $(".x-item-title > h1 > span").first().text();
-  return { price: itemPrice, title: itemTitle };
+  const imgSrc = $(".image img").attr().src;
+  return { price: itemPrice, title: itemTitle, imgSrc: imgSrc };
 }
 
 async function getAmazonData(responseData) {
   const $ = cheerio.load(responseData);
   const itemPrice = $(".a-price > span").first().text();
   const itemTitle = $("h1 > #productTitle").text().trim();
-  return { price: itemPrice, title: itemTitle };
+  const imgSrc = $(".imgTagWrapper img").attr().src;
+  return { price: itemPrice, title: itemTitle, imgSrc: imgSrc };
 }
 
-async function formatData (urls) {
-  const formattedData = await Promise.all(
-    urls.map(async (url) => {
-      let data = { price: "Price not found", title: "Title not found", url };
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            Accept: "application/json",
-            "User-Agent": "axios 0.21.1",
-          },
-        });
+async function formatData(urls, concurrentRequests = 10) {
+  const formattedData = [];
 
-        //TODO: add validation if site not exist \ missing http \ missig https
+  // Function to process a URL and push the result to formattedData
+  async function processUrl(url) {
+    let data = { price: "Price not found", title: "Title not found", url };
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Accept: "application/json",
+          "User-Agent": "axios 0.21.1",
+        },
+      });
 
-        let siteData = {};
-        if (url.includes("amazon")) {
-          siteData = await getAmazonData(response.data);
-        } else if (url.includes("ebay")) {
-          siteData = await getEbayData(response.data);
-        }
-
-        data = { ...data, ...siteData };
-        console.log("data", data);
-      } catch (e) {
-        console.log("could not load site");
+      let siteData = {};
+      if (url.includes("amazon")) {
+        siteData = await getAmazonData(response.data);
+      } else if (url.includes("ebay")) {
+        siteData = await getEbayData(response.data);
       }
 
-      return data;
-    })
-  );
+      data = { ...data, ...siteData };
+    } catch (e) {
+      console.log("could not load site");
+    }
 
-  return formattedData
+    return data;
+  }
+
+  // Create a concurrency limiter
+  const limit = pLimit(concurrentRequests);
+
+  // Process each URL with limited concurrency
+  const promises = urls.map(url => limit(() => processUrl(url)));
+  const results = await Promise.allSettled(promises);
+
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      formattedData.push(result.value);
+    }
+  }
+
+  return formattedData;
 }
 
+// app.get("/", async (req, res) => {
+//   if (SAVED_DATA.length !== URLS.length) {
+//     const formattedData = await formatData(URLS)
+//     res.json(formattedData.filter);
+//     SAVED_DATA = formattedData;
+//   } else {
+//     res.json(SAVED_DATA);
+//   }
+// });
+
+// app.get("/search", async (req, res) => {
+//   const { searchTerm } = req.query;
+
+//     res.json(SAVED_DATA.filter(data => data.title.includes(searchTerm)));
+// });
+
 app.get("/", async (req, res) => {
+  const { page = 1, limit = 10, searchTerm = ""} = req.query;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
   if (SAVED_DATA.length !== URLS.length) {
-    const formattedData = await formatData(URLS)
-    res.json(formattedData);
+    const formattedData = await formatData(URLS);
     SAVED_DATA = formattedData;
-  } else {
-    res.json(SAVED_DATA);
   }
+
+  const paginatedData = SAVED_DATA.filter(data => data.title.includes(searchTerm)).slice(startIndex, endIndex);
+  res.json(paginatedData);
 });
+
+
 
 app.post("/addUrl", async (req, res) => {
   const { url } = req.body;

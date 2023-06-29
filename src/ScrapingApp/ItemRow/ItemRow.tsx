@@ -5,22 +5,30 @@ export type ItemRowType = {
   url: string;
   title: string;
   price: string;
+  imgSrc?: string
 };
 
-const ItemRow = ({ url, title, price }: ItemRowType) => {
+const ItemRow = ({ url, title, price, imgSrc }: ItemRowType) => {
   return (
     <ItemRowWrapper>
-      <div className={"titles"}>
-        <div className="title">title:</div>
-        <div className="value">{title}</div>
+      <div className="img">
+        <img src={imgSrc} />
       </div>
-      <div className={"price"}>
-        <div className="title">price:</div>
-        <div className="value">{price}</div>
-      </div>
-      <div className={"url"}>
-        <div className="title">url:</div>
-        <div className="value">{url}</div>
+      <div className={"titles-wrapper"}>
+        <div className={"title"}>
+          <div className="title">title:</div>
+          <div className="value">{title}</div>
+        </div>
+        <div className={"price"}>
+          <div className="title">price:</div>
+          <div className="value">{price}</div>
+        </div>
+        <div className={"url"}>
+          <div className="title">link:</div>
+          <div className="value">
+            <a href={url}>{url}</a>
+          </div>
+        </div>
       </div>
     </ItemRowWrapper>
   );
@@ -29,17 +37,40 @@ const ItemRow = ({ url, title, price }: ItemRowType) => {
 export default ItemRow;
 
 const ItemRowWrapper = styled.div`
-  /* CSS styles */
-  display: grid;
-  grid-template-columns: 40% 15% 1fr;
-  min-height: 80px;
   border-top: 1px solid black;
-  align-items: center;
+  height: 140px;
   padding: 0 16px;
-  justify-content: space-between;
-
-  div {
+  display: flex;
+  align-items: center;
+  /* CSS styles */
+  .titles-wrapper {
+    width: calc(100% - 156px);
+    display: grid;
+    grid-template-columns: 40% 20% 40%;
+    align-items: center;
+    justify-content: space-between;
+    
+    .url {
+      padding-right: 16px;
+    }
+    div {
     margin-right: 16px;
-    /* width: max-content; */
+  }
+  }
+
+  .titles-wrapper {
+  }
+
+  .img {
+    display: flex;
+    align-items: center;
+    height: 140px;
+    width: 140px;
+    margin-right: 24px;
+    
+    img {
+      width: 140px;
+      height: 100px;
+    }
   }
 `;
