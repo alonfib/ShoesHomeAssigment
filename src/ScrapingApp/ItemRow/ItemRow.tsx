@@ -34,11 +34,16 @@ const ItemRow = ({ url, title, price, imgSrc }: ItemRowType) => {
 export default ItemRow;
 
 const ItemRowWrapper = styled.div`
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
   height: 80px;
   padding: 8px 16px;
+  margin: 8px 4px;
   display: flex;
   align-items: center;
+  border-radius: 8px;
+  border: 1px solid #2c3e50;
+  box-shadow: 2px 3px 4px 0px #00000052;
+  background-color: #3598db12;
   /* CSS styles */
   .titles-wrapper {
     width: calc(100% - 156px);
@@ -64,12 +69,14 @@ const ItemRowWrapper = styled.div`
     display: flex;
     align-items: center;
     height: 100%;
-    /* width: 100%; */
     margin-right: 24px;
+    
     
     img {
       width: 140px;
       height: 100%;
+      border-radius: 4px;
+      border: 1px solid #98c8ed;
     }
   }
 `;

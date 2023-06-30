@@ -4,10 +4,8 @@ import ScrapingApp from './ScrapingApp/ScrapingApp';
 
 // app prepare file
 function App() {
-
-  return (
-    <ScrapingApp/>
-  );
+  
+  return  <ScrapingApp/>
 }
 
 export default App;

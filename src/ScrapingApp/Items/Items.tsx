@@ -4,11 +4,12 @@ import ItemRow, { ItemRowType } from "../ItemRow/ItemRow";
 
 export type ItemType = {
   items: ItemRowType[];
+  className?: string;
 };
 
-const Items = ({ items }: ItemType) => {
+const Items = ({ items, className= "" }: ItemType) => {
   return (
-    <ItemsWrapper>
+    <ItemsWrapper className={className}>
       {!!items && items.length > 0 && items.map((item) => (
         <ItemRow
           url={item.url}
@@ -26,7 +27,8 @@ export default Items;
 
 const ItemsWrapper = styled.div`
   display: flex;
-  /* width: 300; */
   flex-direction: column;
-  background-color: "red";
+  flex: 1; /* Take up remaining vertical space */
+  padding-bottom: 120px;
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds the height */
 `;

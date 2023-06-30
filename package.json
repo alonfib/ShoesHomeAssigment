@@ -16,6 +16,9 @@
     "npm": "^9.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
+    "react-js-pagination": "^3.0.3",
+    "react-paginate": "^8.2.0",
     "react-scripts": "5.0.1",
     "scss": "^0.2.4",
     "styled-components": "^6.0.1",
@@ -26,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "nodemon --watch server --exec ts-node server/server.ts"
   },
   "eslintConfig": {
     "extends": [
