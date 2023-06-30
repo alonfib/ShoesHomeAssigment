@@ -95,7 +95,11 @@ function ScrapingApp() {
             <div>link</div>
           </div>
         </div>
-        {isLoading ? "Loading" : <Items items={items} />}
+        {isLoading ? "Loading" : 
+        items.length > 0 ?
+        <Items items={items} />
+          : <div className="not-found">No Items Found</div>
+      }
       </div>
     </ScrappingAppWrapper>
   );
@@ -186,6 +190,13 @@ const ScrappingAppWrapper = styled.div`
     flex-direction: column;
     height: inherit;
     padding: 0 8px;
+
+    .not-found {
+      padding-top: 40px;
+      font-size: 32px;
+      font-weight: bolder;
+      /* text-align: center; */
+    }
 
     h2 {
       color: #2c3e50;
