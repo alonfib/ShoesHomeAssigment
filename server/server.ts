@@ -1,5 +1,3 @@
-// import { Request, Response } from "express";
-
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
@@ -176,3 +174,6 @@ app.get("*", (req: any, res: any) => {
 app.listen(4000, () => {
   console.log("Proxy server is running on port 4000");
 });
+
+
+export default app;
