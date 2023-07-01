@@ -146,7 +146,7 @@ app.get("/", async (req: any, res: any) => {
     MOCK_DB.push(...formattedNewData);
   }
 
-  const paginatedData = MOCK_DB.filter((data) => data.title.includes(searchTerm)).slice(startIndex, endIndex);
+  const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())).slice(startIndex, endIndex);
   res.json(paginatedData);
 });
 
@@ -159,9 +159,9 @@ app.post("/addUrl", async (req: any, res: any) => {
   if (!!url) {
     // TODO: validate url
     const formattedData = await formatData([url]);
-    MOCK_DB.push(...formattedData);
-    URLS_DB.push(url);
-    const paginatedData = MOCK_DB.filter((data) => data.title.includes(searchTerm)).slice(startIndex, endIndex);
+    MOCK_DB.unshift(...formattedData);
+    URLS_DB.unshift(url);
+    const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())).slice(startIndex, endIndex);
     res.json(paginatedData);
   }
 });
@@ -174,6 +174,3 @@ app.get("*", (req: any, res: any) => {
 app.listen(4000, () => {
   console.log("Proxy server is running on port 4000");
 });
-
-
-export default app;

@@ -1,6 +1,6 @@
 const chai = require("chai");
 const axios = require("axios");
-const { app } = require("../server/server.ts"); s// Assuming your server file is named server.js
+const { app } = require("../server/server.ts"); // Assuming your server file is named server.js
 
 const expect = chai.expect;
 

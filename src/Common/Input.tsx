@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "styled-components";
 import { useDebounce } from "use-debounce";
 import { IoIosSearch } from "react-icons/io";
+import { InputWrapper, StyledInput, IconWrapper } from "./Input.styled";
 
 type IInput = {
   value?: string;
@@ -12,6 +12,7 @@ type IInput = {
   debounceDelay?: number;
   defaultValue?: string;
   isSearch?: boolean;
+  disabled?: boolean;
 };
 
 const Input = ({
@@ -22,7 +23,8 @@ const Input = ({
   inputType = "text",
   className = "",
   debounceDelay = 0,
-  isSearch = false
+  isSearch = false,
+  disabled = false,
 }: IInput) => {
   const [inputValue, setInputValue] = useState<string | undefined>(value);
 
@@ -38,7 +40,7 @@ const Input = ({
     if (debouncedValue !== undefined) {
       onChange(debouncedValue);
     }
-  }, [debouncedValue]);
+  }, [debouncedValue,onChange]);
 
   return (
     <InputWrapper className={className}>
@@ -48,37 +50,15 @@ const Input = ({
         value={inputValue}
         onChange={handleChange}
         placeholder={placeholder}
+        disabled={disabled}
       />
-      {isSearch ? <SearchIconWrapper>
-        <IoIosSearch />
-      </SearchIconWrapper> : null }
+      {isSearch ? (
+        <IconWrapper>
+          <IoIosSearch />
+        </IconWrapper>
+      ) : null}
     </InputWrapper>
   );
 };
 
 export default Input;
-
-const InputWrapper = styled.div`
-  position: relative;
-`;
-
-const StyledInput = styled.input`
-  height: 20px;
-  padding: 4px 8px;
-  padding-right: 30px; /* Space for the search icon */
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
-const SearchIconWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  color: #ccc;
-`;
