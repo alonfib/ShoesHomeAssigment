@@ -50,7 +50,8 @@ describe("Connect Server", function () {
 
 describe("Post /addUrl", function () {
   it("Should return items with new item first & formated well", async function () {
-    const postUrl = "postUrl";
+    // a string from SupportedSites enum
+    const postUrl = "amazon";
     request(SERVER_URL).post("/addUrl").send({
       url: postUrl
     }).expect(function(res) {

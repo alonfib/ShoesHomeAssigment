@@ -40,6 +40,11 @@ interface IGetItemsRequest {
   searchTerm?: string;
 }
 
+enum SupportedSites {
+  Amazon = "amazon",
+  Ebay = "ebay"
+}
+
 const DEFAULT_CONCURRENT_REQUESTS = 10;
 
 let URLS_DB: string[] = [];
@@ -93,9 +98,9 @@ async function processUrl(url: string) {
     });
 
     let siteData = {};
-    if (url.includes("amazon")) {
+    if (url.includes(SupportedSites.Amazon)) {
       siteData = await getSiteData(response.data, amazonSelectors);
-    } else if (url.includes("ebay")) {
+    } else if (url.includes(SupportedSites.Ebay)) {
       siteData = await getSiteData(response.data, ebaySelectors);
     }
 
@@ -133,7 +138,7 @@ app.get("/", async (req: any, res: any) => {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
 
-  //fetch from server
+  // "fetchedData" should be data fetch from somewhere;
   const fetchedData = [...FETCH_DATA];
   URLS_DB = fetchedData;
 
@@ -153,12 +158,10 @@ app.get("/", async (req: any, res: any) => {
 
 // app.post("/addUrl", async (req: Request, res: Response) => {
 app.post("/addUrl", async (req: any, res: any) => {
-  const { url, page, limit, searchTerm } = req.body;
+  const { url , page, limit, searchTerm } = req.body;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-
-  if (!!url) {
-    // TODO: validate url
+  if (Object.values(SupportedSites).includes(url)) {
     const formattedData = await formatData([url]);
     MOCK_DB.unshift(...formattedData);
     URLS_DB.unshift(url);
