@@ -28,7 +28,6 @@ export default Items;
 const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1; /* Take up remaining vertical space */
+  flex: 1; 
   padding-bottom: 120px;
-  overflow-y: auto; /* Enable vertical scrolling when content exceeds the height */
-`;
+  overflow-y: auto; 
