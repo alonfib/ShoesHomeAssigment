@@ -24,13 +24,14 @@
     "react-scripts": "5.0.1",
     "react-spinners": "^0.13.8",
     "styled-components": "^6.0.1",
+    "supertest": "^6.3.3",
     "use-debounce": "^9.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "server": "nodemon --watch server --exec ts-node server/server.ts"
   },
@@ -53,9 +54,11 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.22.5",
     "@types/jsdom": "^21.1.1",
     "@types/node-sass": "^4.11.3",
     "node-sass": "^7.0.3",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   }
 }

@@ -6,3 +6,5 @@ to start server follow steps:
 * npm start
 
 if npm i fails, try "npm i --force".
+
+** node-v16.17.1 required :(

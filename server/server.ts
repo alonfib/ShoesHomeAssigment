@@ -79,36 +79,37 @@ async function getSiteData(
     itemPrice = "Price not found";
   }
   return { price: itemPrice, title: itemTitle, imgSrc: imgSrc };
+
+}
+// Function to process a URL and push the result to formattedData
+async function processUrl(url: string) {
+  let data: IDataRow = { price: "Price not found", title: "Title not found", imgSrc: "Image not found", url };
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "axios 0.21.1",
+      },
+    });
+
+    let siteData = {};
+    if (url.includes("amazon")) {
+      siteData = await getSiteData(response.data, amazonSelectors);
+    } else if (url.includes("ebay")) {
+      siteData = await getSiteData(response.data, ebaySelectors);
+    }
+
+    data = { ...data, ...siteData };
+  } catch (e) {
+    console.log("could not load site");
+  }
+
+  return data;
 }
 
 async function formatData(urls: string[], concurrentRequests: number = DEFAULT_CONCURRENT_REQUESTS) {
   const formattedData: IDataRow[] = [];
 
-  // Function to process a URL and push the result to formattedData
-  async function processUrl(url: string) {
-    let data: IDataRow = { price: "Price not found", title: "Title not found", imgSrc: "Image not found", url };
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          Accept: "application/json",
-          "User-Agent": "axios 0.21.1",
-        },
-      });
-
-      let siteData = {};
-      if (url.includes("amazon")) {
-        siteData = await getSiteData(response.data, amazonSelectors);
-      } else if (url.includes("ebay")) {
-        siteData = await getSiteData(response.data, ebaySelectors);
-      }
-
-      data = { ...data, ...siteData };
-    } catch (e) {
-      console.log("could not load site");
-    }
-
-    return data;
-  }
 
   // Create a concurrency limiter
   const limit = pLimit(concurrentRequests);
@@ -138,7 +139,7 @@ app.get("/", async (req: any, res: any) => {
 
   if (refresh) {
     const formattedNewData = await formatData(fetchedData);
-    MOCK_DB  = formattedNewData
+    MOCK_DB = formattedNewData
   } else if (URLS_DB.length === 0 || MOCK_DB.length !== URLS_DB.length) {
     const savedUrls = MOCK_DB.map((item) => item.url);
     const newData = URLS_DB.filter((url) => !savedUrls.includes(url));
@@ -146,7 +147,7 @@ app.get("/", async (req: any, res: any) => {
     MOCK_DB.push(...formattedNewData);
   }
 
-  const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())).slice(startIndex, endIndex);
+  const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm?.toLocaleLowerCase() ?? "")).slice(startIndex, endIndex);
   res.json(paginatedData);
 });
 
@@ -161,7 +162,9 @@ app.post("/addUrl", async (req: any, res: any) => {
     const formattedData = await formatData([url]);
     MOCK_DB.unshift(...formattedData);
     URLS_DB.unshift(url);
-    const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())).slice(startIndex, endIndex);
+    console.log("url", url);
+    
+    const paginatedData = MOCK_DB.filter((data) => data.title.toLocaleLowerCase().includes(searchTerm?.toLocaleLowerCase() ?? "")).slice(startIndex, endIndex);
     res.json(paginatedData);
   }
 });
